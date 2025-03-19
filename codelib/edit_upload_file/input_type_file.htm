@@ -1,0 +1,87 @@
+<script>
+
+function saveFileName(ObjId, fileId, fileName) {
+    $('#'+ObjId).val(fileId + '_' + fileName).change();
+}
+function setFileLink(ObjId) {
+	var file = $('#'+ ObjId);
+	var url = 'libs/upload/files/' + file.val();
+	file.css('cursor','pointer');
+	file.click(function () { 
+	   window.open(url);
+	});
+}
+    
+$(document).ready(function(e) {
+
+    if (nuIsNewRecord()) {
+	 nuMessage([nuTranslate('Please save the form first before uploading a file.')]);
+	 return;
+    }      
+	
+    $("#loading_spinner").hide();
+    
+    $('#fileToUpload').on('change', function(event) {
+
+        $("#loading_spinner").show();
+        
+        var file = $(this)[0].files[0];
+        var formdata = new FormData();
+        formdata.append('file', file);
+        formdata.append('record_id', nuCurrentProperties().record_id);
+
+        $.ajax({
+            type: "POST",
+            url: "libs/upload/upload.php",
+            data: formdata,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+
+                var result = JSON.parse(data);
+                if (result.error !== '') {
+                    var err = "";
+                    switch (result.error) {
+                        case "INVALID_FILE_TYPE":
+                            err = "The file type is not allowed.";
+                            break;
+                        case "ERROR_MOVING_FILE":
+                            err = "The file cannot be moved to the destination directory.";
+                            break;
+                        case "FILE_TOO_LARGE":
+                            err = "Error: File size is larger than the allowed limit.";
+                            break;
+                        default:
+                            err = result.error;
+                    }
+                    
+                    nuMessage([nuTranslate("Upload Failed:") + ' ' + nuTranslate(err)]);
+
+                } else {
+                    nuMessage([nuTranslate("Upload successful:") + ' ' + result.file_name]);
+                    
+                    // Save the file_id + file_name in a separate text object: 
+                    saveFileName('file_name', result.file_id, result.file_name);
+                    setFileLink('file_name');
+                }
+
+                $("#upload-form")[0].reset();
+                $("#loading_spinner").hide();
+
+            },
+            error: function(data) {
+                nuMessage([nuTranslate("Upload Failed")]);
+                $("#upload-form")[0].reset();
+                $("#loading_spinner").hide();
+            }
+        });
+    });
+});
+
+</script>
+
+<form id="upload-form" action="libs/upload/upload.php" method="post" enctype="multipart/form-data">   
+    <input type="file" name="fileToUpload" id="fileToUpload"><br>
+    <div id="loading_spinner"><i class="fa fa-spinner fa-pulse"></i> Uploading</div>
+</form>
