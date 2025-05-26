@@ -12,7 +12,7 @@ var idRowFileName;
 var idRowFileId;
 
 function uploadFile(event) {
-    var td = $(event.target);
+    var td = $(event.target).parent();
     var t = td.attr('data-nu-prefix');
 
     idRowFileName = t + idFileName;
