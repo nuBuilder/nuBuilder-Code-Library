@@ -141,8 +141,6 @@
 
 * 2020-04-27: <b>Subform:</b> Strike through a Row [→ view](codelib/subform_row_strike_through)
 
-* 2020-04-16: <b>Edit Screen:</b> Add a Print Button [→ view](codelib/edit_add_print_button)
-
 * 2020-04-16: <b>Browse Screen:</b> Add delete buttons to Rows [→ view](codelib/browse_add_delete_buttons)
 
 * 2020-04-12: <b>Browse Screen:</b> Translate data [→ view](codelib/browse_translate_data)
