@@ -2,7 +2,7 @@
 
 ### Question:
 
-Within the user form, there are text input fields such as "Team" and "Organization" that accept any user input. 
+Within the user form, there are text input fields such as "Team" and "Organisation" that accept any user input. 
 However, I would like to substitute these text fields with select fields, enabling the selection of only predefined values. 
 Based on my understanding, modifications to the core forms are overwritten during updates.
 Is there any way to achieve this regardless? I'm aiming to avoid the inclusion of invalid entries in certain fields.
